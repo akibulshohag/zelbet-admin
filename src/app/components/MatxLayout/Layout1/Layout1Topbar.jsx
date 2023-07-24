@@ -20,8 +20,8 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
  "linear-gradient(180deg, rgba(255, 255, 255, 0.95) 44%, rgba(247, 247, 247, 0.4) 50%, rgba(255, 255, 255, 0))",
 
     "& .topbar-hold": {
-      // backgroundColor: palette.primary.main,
-      backgroundColor:'#000',
+      backgroundColor: palette.primary.main,
+      // backgroundColor:'#000',
       height: 80,
       paddingLeft: 18,
       paddingRight: 20,
@@ -45,7 +45,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
     cursor: "pointer",
     borderRadius: 24,
     padding: 4,
-    color:'#F6F30F',
+    color:'#000',
     "& span": {
       margin: "0 8px",
       // color: palette.text.secondary

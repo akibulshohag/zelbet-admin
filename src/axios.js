@@ -2,7 +2,7 @@ import Axios from "axios";
 let token = localStorage.getItem("accessToken") || "";
 
 const axios = Axios.create({
-  baseURL: `https://lefabre-api.b2gsoft.xyz/api/v1`, // live
+  baseURL: `https://api.zerozb.me/api/v1`, // live
 
   // baseURL:
   //   process.env.NODE_ENV === "development"

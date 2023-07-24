@@ -49,7 +49,7 @@ const EmployeeList = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        let res = await axios.get("/employee/fetch-all");
+        let res = await axios.get("/admin/employee-list");
         setDataList(res?.data?.data);
         setIsLoading(false);
         setErrorMsg("");
@@ -189,7 +189,7 @@ const EmployeeList = () => {
                               {data?.phone}
                             </TableCell>
                             <TableCell className="capitalize" align="left">
-                              {!data?.isDisabled ? (
+                              {data?.isActivated ? (
                                 <small className="rounded bg-primary elevation-z3 text-white px-2 py-2px mr-4">
                                   active
                                 </small>
@@ -202,7 +202,7 @@ const EmployeeList = () => {
                                 control={
                                   <IOSSwitch
                                     sx={{ m: 1 }}
-                                    checked={!data?.isDisabled}
+                                    checked={data?.isActivated}
                                     onClick={() => statusUpdateHandler(data)}
                                   />
                                 }
@@ -239,7 +239,7 @@ const EmployeeList = () => {
                               <IconButton
                                 onClick={() => {
                                   setIsOpenModal(true);
-                                  setDeleteId(data._id);
+                                  setDeleteId(data?.empId);
                                 }}
                                 style={{
                                   backgroundColor: "#ebedec",
