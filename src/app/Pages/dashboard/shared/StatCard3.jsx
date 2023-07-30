@@ -23,27 +23,27 @@ const StatCard3 = () => {
   const [endTime, setEndTime] = useState(new Date());
   const [isReset, setIsReset] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        let obj = {
-          startTime: new Date().toISOString(),
-          endTime: new Date().toISOString(),
-        };
-        let res = await axios.post(`admin/order-history`, obj);
-        console.log(res);
-        if (res?.data?.success) {
-          console.log(res);
-          setDataList(res?.data?.data);
-        }
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [isReset]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       let obj = {
+  //         startTime: new Date().toISOString(),
+  //         endTime: new Date().toISOString(),
+  //       };
+  //       let res = await axios.post(`admin/order-history`, obj);
+  //       console.log(res);
+  //       if (res?.data?.success) {
+  //         console.log(res);
+  //         setDataList(res?.data?.data);
+  //       }
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [isReset]);
 
   const filterHander = async () => {
     try {

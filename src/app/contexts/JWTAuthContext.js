@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
             const user = {
                 email: response.data.data.email,
                 name: response.data.data.email,
-                role: response.data.data.email,
+                role: response.data.data.role,
                 superAdmin: response.data.data.email,
                 _id: response.data.data.email,
             }
@@ -168,6 +168,7 @@ export const AuthProvider = ({ children }) => {
                         superAdmin: decoded?.data?.superAdmin,
                         _id: decoded?.data?._id,
                     }
+
 
                     dispatch({
                         type: 'INIT',

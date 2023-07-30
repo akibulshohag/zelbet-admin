@@ -127,7 +127,7 @@ const Layout1Topbar = () => {
                 <div className={classes.userMenu}>
                   <Hidden xsDown>
                     <span>
-                      Hi <strong>{user.name || user.email.slice(0, 6)}</strong>
+                      Hi <strong>{user.name || user.email.slice(0, 5)}</strong>
                     </span>
                   </Hidden>
                   <Avatar className="cursor-pointer" src={imageBasePath + "/" + user.thumbnail} />

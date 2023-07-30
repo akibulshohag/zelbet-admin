@@ -9,21 +9,21 @@ const StatCards2 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataList, setDataList] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        let res = await axios.get(`admin/total-history`);
-        if (res) {
-          setDataList(res?.data?.data);
-        }
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       let res = await axios.get(`admin/total-history`);
+  //       if (res) {
+  //         setDataList(res?.data?.data);
+  //       }
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <>
