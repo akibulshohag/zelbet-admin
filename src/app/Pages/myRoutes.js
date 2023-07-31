@@ -1,11 +1,12 @@
 import React from "react";
 
 const pagesRoutes = [
+  // dashboard for zelbet
   {
     path: "/dashboard",
     component: React.lazy(() => import("./dashboard/dashboard")),
   }, 
-  // profile for zelbet
+  // general for zelbet
   {
     path: "/profile",
     component: React.lazy(() => import("./general/profile")),
@@ -14,7 +15,7 @@ const pagesRoutes = [
     path: "/password",
     component: React.lazy(() => import("./general/password")),
   },
-  //  employee 
+  //  employee for zelbet
   {
     path: "/create-employee",
     component: React.lazy(() => import("./employee/createEmployee")),
@@ -26,6 +27,20 @@ const pagesRoutes = [
   {
     path: "/employee-role/:employeeId",
     component: React.lazy(() => import("./employee/rolePermission")),
+  },
+
+  // user for zelbet
+  {
+    path: "/pending-user-list",
+    component: React.lazy(() => import("./user/pendingUserList.jsx")),
+  },
+  {
+    path: "/verify-user-list",
+    component: React.lazy(() => import("./user/verifyUserList.jsx")),
+  },
+  {
+    path: "/suspended-user-list",
+    component: React.lazy(() => import("./user/suspendedUserList.jsx")),
   },
 
 

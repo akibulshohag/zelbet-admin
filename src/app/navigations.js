@@ -28,10 +28,10 @@ export const navigations = [
   //   ],
   // },
 
-  {
-    label: "Product",
-    type: "label",
-  },
+  // {
+  //   label: "Product",
+  //   type: "label",
+  // },
   // {
   //   name: "Pages",
   //   icon: "card_giftcard",
@@ -81,6 +81,27 @@ export const navigations = [
       {
         name: "Employee List",
         path: "/employee-list",
+        iconText: "VO",
+      },
+    ],
+  },
+  {
+    name: "User",
+    icon: "card_giftcard",
+    children: [
+      {
+        name: "Pending Users",
+        path: "/pending-user-list",
+        iconText: "VO",
+      },
+      {
+        name: "Verified Users",
+        path: "/verify-user-list",
+        iconText: "VO",
+      },
+      {
+        name: "Suspended Users",
+        path: "/suspended-user-list",
         iconText: "VO",
       },
     ],
