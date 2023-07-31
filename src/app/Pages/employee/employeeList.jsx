@@ -1,36 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { Breadcrumb } from "../../components/index";
-import "react-loading-skeleton/dist/skeleton.css";
 import {
-  IconButton,
-  TableCell,
-  TableRow,
-  Table,
-  TableHead,
-  TableBody,
-  Grid,
-  Typography,
-  Box,
-  Card,
-  Button,
-  FormControlLabel,
   Avatar,
+  Box,
+  Button,
+  Card,
   CardHeader,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  TablePagination
 } from "@material-ui/core";
-import axios from "../../../axios";
-import Spinner from "../../Shared/Spinner/Spinner";
-import { useHistory } from "react-router-dom";
-import SimpleModal from "../../Shared/SimpleModal/SimpleModal";
 import { notification } from "antd";
-import IOSSwitch from "../../Shared/Forms/iosSwitch";
+import React, { useEffect, useState } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
+import { useHistory } from "react-router-dom";
+import axios from "../../../axios";
 import imageBasePath from "../../../config";
+import IOSSwitch from "../../Shared/Forms/iosSwitch";
+import SimpleModal from "../../Shared/SimpleModal/SimpleModal";
+import Spinner from "../../Shared/Spinner/Spinner";
+import { Breadcrumb } from "../../components/index";
 // import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin3Line } from "react-icons/ri";
-import { IoMdAddCircle } from "react-icons/io";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { IoMdAddCircle } from "react-icons/io";
+import { RiDeleteBin3Line } from "react-icons/ri";
 
 const EmployeeList = () => {
   const history = useHistory();
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [totalData, setTotalData] = useState(0);
 
   const [dataList, setDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +54,9 @@ const EmployeeList = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        let res = await axios.get("/admin/employee-list");
+        let res = await axios.get(`/admin/employee-list?pageNo=${page+1}&perPage=${rowsPerPage}`);
         setDataList(res?.data?.data);
+        setTotalData(res?.data?.totalEmployee);
         setIsLoading(false);
         setErrorMsg("");
       } catch (err) {
@@ -59,7 +65,7 @@ const EmployeeList = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [page, rowsPerPage]);
 
   const closeModalHandler = () => {
     setDeleteId(false);
@@ -68,9 +74,12 @@ const EmployeeList = () => {
   };
 
   const deleteHandler = async () => {
+    let obj={
+      empId:deleteId
+    }
     try {
-      let res = await axios.delete(`/employee/delete/${deleteId}`);
-      setDataList(dataList.filter((i) => i._id !== deleteId));
+      let res = await axios.post(`/admin/employee-delete`,obj);
+      setDataList(dataList.filter((i) => i.empId !== deleteId));
       openNotificationWithIcon(res?.data?.message, "success");
     } catch (error) {
       openNotificationWithIcon(error?.response?.data?.message, "error");
@@ -79,22 +88,32 @@ const EmployeeList = () => {
     setIsOpenModal(false);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   const statusUpdateHandler = async (data) => {
+    let obj ={
+      empId:data?.empId,
+	    isActivated:!data?.isActivated
+    }
     try {
       const createRes = await axios.patch(
-        `/employee/activate-deactivate/${
-          data?._id
-        }?isDisabled=${!data?.isDisabled}`
+        `/admin/employee-status-update`,obj
       );
       let updatedData = dataList.map((list) => {
-        if (list._id === data._id) {
-          list.isDisabled = !list.isDisabled;
+        if (list.empId === data?.empId) {
+          list.isActivated = !list.isActivated;
         }
         return list;
       });
       setDataList(updatedData);
       if (createRes?.data?.success) {
-        openNotificationWithIcon(createRes?.data?.message, "success");
+        openNotificationWithIcon(createRes?.data?.message, "success")
       }
       setIsLoading(false);
     } catch (error) {
@@ -140,6 +159,7 @@ const EmployeeList = () => {
             <CardHeader title="Employee List" />
 
             {!isLoading ? (
+              <>
               <div className="w-full overflow-auto  px-6 py-8">
                 {dataList.length > 0 && errorMsg === "" ? (
                   <div
@@ -180,7 +200,7 @@ const EmployeeList = () => {
                               />
                             </TableCell>
                             <TableCell className="capitalize" align="left">
-                              {data?.name}
+                              {data?.firstName} {data?.lastName}
                             </TableCell>
                             <TableCell className="capitalize" align="left">
                               {data?.email}
@@ -270,6 +290,16 @@ const EmployeeList = () => {
                   </Typography>
                 )}
               </div>
+              <TablePagination
+                  rowsPerPageOptions={[10, 25, 100]}
+                  component="div"
+                  count={totalData} // total data
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </>
             ) : (
               <Box
                 sx={{

@@ -20,8 +20,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import IOSSwitch from "../../Shared/Forms/iosSwitch";
 import { convertImageToBase64 } from "../../util/convertImageToBase64";
+import { useHistory } from "react-router-dom";
+
 
 const CreateEmployee = () => {
+  const history = useHistory();
   const [isDisabled, setIsDisabled] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [fileList, setFileList] = useState([]);
@@ -29,15 +32,16 @@ const CreateEmployee = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required("name is required")
+    firstName: Yup.string()
+      .required("First Name is required")
+      .min(2, "too small name, minimum 3 character")
+      .max(10, "too big name, maximum 60 character "),
+    lastName: Yup.string()
+      .required("last Name is required")
       .min(2, "too small name, minimum 3 character")
       .max(10, "too big name, maximum 60 character "),
     email: Yup.string().required("email is required"),
     phone: Yup.string().required("phone is required"),
-    password: Yup.string()
-      .required("password is required")
-      .min(4, "too small password, minimum 4 character"),
   });
 
   const openNotificationWithIcon = (message, type) => {
@@ -65,16 +69,16 @@ const CreateEmployee = () => {
       }
 
       let obj = {
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         phone: data.phone,
-        password: data.password,
         image: baseImg,
-        isDisabled: isDisabled,
+        isActivated: isDisabled,
       };
-
+  
       setIsLoading(true);
-      const res = await axios.post(`/employee/create`, obj);
+      const res = await axios.post(`/admin/create-new-employee`, obj);
       if (res?.data?.success) {
         reset();
         setIsDisabled(false);
@@ -82,6 +86,7 @@ const CreateEmployee = () => {
         setSelectedFile();
         setFileError("");
         openNotificationWithIcon(res?.data?.message, "success");
+        history.push('/employee-list')
       } else {
         openNotificationWithIcon(res?.data?.message, "error");
       }
@@ -113,7 +118,7 @@ const CreateEmployee = () => {
       </div>
 
       <Grid container>
-        <Grid item md={6} xs={12}>
+        <Grid item  md={12} lg={6} xs={12}>
           <Card elevation={3}>
             <CardHeader title="Add New Employee" />
 
@@ -122,18 +127,34 @@ const CreateEmployee = () => {
                 <Grid item sm={8} xs={12}>
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="label" className="mb-2">
-                      Name<span style={{ color: "red" }}>*</span>
+                      First Name<span style={{ color: "red" }}>*</span>
                     </Typography>
                     <TextField
-                      name="name"
+                      name="firstName"
                       label=""
                       variant="outlined"
                       size="small"
                       fullWidth
-                      {...register("name")}
+                      {...register("firstName")}
                     />
                     <p style={{ color: "red" }}>
-                      <small>{errors.name?.message}</small>
+                      <small>{errors.firstName?.message}</small>
+                    </p>
+                  </Box>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="label" className="mb-2">
+                      Last Name<span style={{ color: "red" }}>*</span>
+                    </Typography>
+                    <TextField
+                      name="lastName"
+                      label=""
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      {...register("lastName")}
+                    />
+                    <p style={{ color: "red" }}>
+                      <small>{errors.lastName?.message}</small>
                     </p>
                   </Box>
                   <Box sx={{ mb: 2 }}>
@@ -168,22 +189,6 @@ const CreateEmployee = () => {
                       <small>{errors.phone?.message}</small>
                     </p>
                   </Box>
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="label" className="mb-2">
-                      Password<span style={{ color: "red" }}>*</span>
-                    </Typography>
-                    <TextField
-                      name="password"
-                      label=""
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      {...register("password")}
-                    />
-                    <p style={{ color: "red" }}>
-                      <small>{errors.password?.message}</small>
-                    </p>
-                  </Box>
 
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="label" className="mb-2">
@@ -207,11 +212,11 @@ const CreateEmployee = () => {
                       control={
                         <IOSSwitch
                           sx={{ m: 1 }}
-                          checked={!isDisabled}
+                          checked={isDisabled}
                           onClick={() => setIsDisabled(!isDisabled)}
                         />
                       }
-                      label={isDisabled ? "Disable" : "Enable"}
+                      label={isDisabled ? "Active" : "Inactive"}
                     />
                   </Box>
                 </Grid>
