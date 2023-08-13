@@ -32,22 +32,22 @@ export const navigations = [
   //   label: "Product",
   //   type: "label",
   // },
-  // {
-  //   name: "Pages",
-  //   icon: "card_giftcard",
-  //   children: [
-  //     {
-  //       name: "Page Update",
-  //       path: "/page-update",
-  //       iconText: "OL",
-  //     },
-  //     {
-  //       name: "Pages View",
-  //       path: "/page-view",
-  //       iconText: "VO",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Pages",
+    icon: "card_giftcard",
+    children: [
+      {
+        name: "Page Update",
+        path: "/page-update",
+        iconText: "OL",
+      },
+      {
+        name: "Pages View",
+        path: "/page-view",
+        iconText: "VO",
+      },
+    ],
+  },
   // {
   //   name: "Media",
   //   icon: "card_giftcard",
