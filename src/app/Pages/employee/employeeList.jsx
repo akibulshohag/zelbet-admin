@@ -236,7 +236,7 @@ const EmployeeList = () => {
                                 size="small"
                                 className="text-white"
                                 onClick={() =>
-                                  history.push("/employee-role/" + data?._id)
+                                  history.push("/employee-role/" + data?.empId)
                                 }
                               >
                                 permission
