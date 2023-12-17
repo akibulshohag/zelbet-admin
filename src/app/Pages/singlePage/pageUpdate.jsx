@@ -26,6 +26,8 @@ const PageUpdate = () => {
   const [privacyPolicy, setPrivacyPolicy] = useState("");
   const [returned, setReturned] = useState("");
   const [refund, setRefund] = useState("");
+  const [contactUs, setContactUs] = useState("");
+
 
   const openNotificationWithIcon = (message, type) => {
     notification[type]({
@@ -37,15 +39,14 @@ const PageUpdate = () => {
     const fetchData = async () => {
       try {
         setIsPageLoading(true);
-        let res = await axios.get("/setting/pages-view");
+        let res = await axios.get("/settings/get-pages");
         if (res) {
           let data = res?.data?.data;
-          setDescription(data?.pages?.aboutUs);
-          setAboutUs(data?.pages?.aboutUs);
-          setTermsAndConditions(data?.pages?.termsAndConditions);
-          setPrivacyPolicy(data?.pages?.privacyPolicy);
-          setReturned(data?.pages?.returned);
-          setRefund(data?.pages?.refund);
+          setDescription(data?.aboutUs);
+          setAboutUs(data?.aboutUs);
+          setTermsAndConditions(data?.terms);
+          setPrivacyPolicy(data?.privacyPolicy);
+          setContactUs(data?.contactUs);
         }
         setIsPageLoading(false);
       } catch (err) {
@@ -59,17 +60,12 @@ const PageUpdate = () => {
     event.preventDefault();
     try {
       let obj = {
-        pages: {
-          aboutUs: aboutUs,
-          termsAndConditions: termsAndConditions,
-          privacyPolicy: privacyPolicy,
-          returned: returned,
-          refund: refund,
-        },
+        pageName:currentPage,
+        data:description
       };
 
       setIsLoading(true);
-      const res = await axios.patch(`/setting/update-pages`, obj);
+      const res = await axios.post(`/settings/update-page`, obj);
       if (res?.data?.success) {
         openNotificationWithIcon(res?.data?.message, "success");
       } else {
@@ -85,30 +81,26 @@ const PageUpdate = () => {
   useEffect(() => {
     if (currentPage === "aboutUs") {
       setDescription(aboutUs);
-    } else if (currentPage === "termsAndConditions") {
+    } else if (currentPage === "terms") {
       setDescription(termsAndConditions);
     } else if (currentPage === "privacyPolicy") {
       setDescription(privacyPolicy);
-    } else if (currentPage === "returned") {
-      setDescription(returned);
-    } else if (currentPage === "refund") {
-      setDescription(refund);
-    }
-  }, [currentPage, aboutUs, privacyPolicy, termsAndConditions, refund, returned]);
+    } else if (currentPage === "contactUs") {
+      setDescription(contactUs);
+    } 
+  }, [currentPage, aboutUs, privacyPolicy, termsAndConditions, contactUs]);
 
   const contentChangeHandler = (value) => {
     setDescription(value);
     if (currentPage === "aboutUs") {
       setAboutUs(value);
-    } else if (currentPage === "termsAndConditions") {
+    } else if (currentPage === "terms") {
       setTermsAndConditions(value);
     } else if (currentPage === "privacyPolicy") {
       setPrivacyPolicy(value);
-    } else if (currentPage === "returned") {
-      setReturned(value);
-    } else if (currentPage === "refund") {
-      setRefund(value);
-    }
+    } else if (currentPage === "contactUs") {
+      setContactUs(value);
+    } 
   };
 
   return (
@@ -138,10 +130,9 @@ const PageUpdate = () => {
                       onChange={(e) => setCurrentPage(e.target.value)}
                     >
                       <MenuItem value="aboutUs"> About Us </MenuItem>
-                      <MenuItem value="termsAndConditions"> Terms And Conditions </MenuItem>
+                      <MenuItem value="terms"> Terms And Conditions </MenuItem>
                       <MenuItem value="privacyPolicy"> Privacy Policy </MenuItem>
-                      <MenuItem value="returned"> Returned </MenuItem>
-                      <MenuItem value="refund"> Refund </MenuItem>
+                      <MenuItem value="contactUs">Contact Us </MenuItem>
                     </TextField>
                   </Grid>
 
