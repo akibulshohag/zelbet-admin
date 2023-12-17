@@ -99,14 +99,14 @@ export const AuthProvider = ({ children }) => {
                 password,
             })
             // const { token, user } = response.data.data
-            console.log('response.data.data',response.data.data)
+            // console.log('response.data.data',response.data.data)
             if(response.data.data.role === "employee"){
-                localStorage.setItem('menuList',JSON.stringify(response.data.data.menuList))
+                localStorage.setItem('menuList',JSON.stringify(response.data.data.menu))
             }
             const token = response.data.data.token
             const user = {
                 email: response.data.data.email,
-                name: response.data.data.email,
+                name: response.data.data.name,
                 role: response.data.data.role,
                 superAdmin: response.data.data.email,
                 _id: response.data.data.email,
