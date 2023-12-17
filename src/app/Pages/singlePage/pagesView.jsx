@@ -32,6 +32,7 @@ const PageUpdate = () => {
   const [privacyPolicy, setPrivacyPolicy] = useState("");
   const [returned, setReturned] = useState("");
   const [refund, setRefund] = useState("");
+  const [contactUs, setContactUs] = useState("");
 
   const [value, setValue] = React.useState(0);
 
@@ -43,14 +44,13 @@ const PageUpdate = () => {
     const fetchData = async () => {
       try {
         setIsPageLoading(true);
-        let res = await axios.get("/setting/pages-view");
+        let res = await axios.get("/settings/get-pages");
         if (res) {
           let data = res?.data?.data;
-          setAboutUs(data?.pages?.aboutUs);
-          setTermsAndConditions(data?.pages?.termsAndConditions);
-          setPrivacyPolicy(data?.pages?.privacyPolicy);
-          setReturned(data?.pages?.returned);
-          setRefund(data?.pages?.refund);
+          setAboutUs(data?.aboutUs);
+          setTermsAndConditions(data?.terms);
+          setPrivacyPolicy(data?.privacyPolicy);
+          setContactUs(data?.contactUs);
         }
         setIsPageLoading(false);
       } catch (err) {
@@ -92,8 +92,7 @@ const PageUpdate = () => {
                       <Tab label="About Us" id={`page-0`} />
                       <Tab label="Terms and Conditions" id={`page-1`} />
                       <Tab label="Privacy Policy" id={`page-2`} />
-                      <Tab label="Returned" id={`page-3`} />
-                      <Tab label="Refund" id={`page-4`} />
+                      <Tab label="Contact Us" id={`page-3`} />
                     </Tabs>
                   </Grid>
                   <Grid item lg={10} xs={12}>
@@ -107,10 +106,7 @@ const PageUpdate = () => {
                       {privacyPolicy}
                     </TabPanel>
                     <TabPanel value={value} index={3}>
-                      {returned}
-                    </TabPanel>
-                    <TabPanel value={value} index={4}>
-                      {refund}
+                      {contactUs}
                     </TabPanel>
                   </Grid>
                 </Grid>
