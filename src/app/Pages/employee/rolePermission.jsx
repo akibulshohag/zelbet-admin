@@ -40,14 +40,14 @@ const CreateRole = () => {
       try {
         setIsLoading(true);
         setIsLoading(false);
-        const res = await axios.get(`/employee/single/${employeeId}`);
+        const res = await axios.get(`/admin//single-employee-info?empId=${employeeId}`);
         if (res.data.success) {
           setEmployeeData(res?.data?.data);
-          setSelectedModule(res?.data?.data?.menuList);
-          setrenderMe(res?.data?.data?.menuList);
+          setSelectedModule(res?.data?.data?.menu);
+          setrenderMe(res?.data?.data?.menu);
 
           navigations.forEach((item, index) => {
-            let is_parent = res?.data?.data?.menuList?.find((val) => val.name === item.name);
+            let is_parent = res?.data?.data?.menu?.find((val) => val.name === item.name);
             if (is_parent && is_parent?.subMenuList?.length) {
               item.children.forEach((child, childIndex) => {
                 let is_child = is_parent?.subMenuList?.find((val) => val === child.name);
@@ -65,7 +65,7 @@ const CreateRole = () => {
               let selected = true;
               item["selected"] = selected;
               setIsAlive(!isAlive);
-            } else if (res?.data?.data?.menuList?.length === 0) {
+            } else if (res?.data?.data?.menu?.length === 0) {
               item["selected"] = false;
             }
           });
@@ -180,11 +180,11 @@ const CreateRole = () => {
 
   const handleSubmit2 = async () => {
     let data = {
-      employeeId: employeeId,
-      menuList: selectedModule,
+      empId: employeeId,
+      menu: selectedModule,
     };
     try {
-      const createRes = await axios.patch(`/employee/role-permission-assign`, data);
+      const createRes = await axios.patch(`/admin/employee-permission-update`, data);
       if (createRes?.data?.success) {
         openNotificationWithIcon(createRes?.data?.message, "success");
       }
