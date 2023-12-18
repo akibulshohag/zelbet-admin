@@ -16,6 +16,7 @@ import {
   TableCell,
   TableBody,
   IconButton,
+  FormControlLabel
 } from "@material-ui/core";
 import { Image, notification } from "antd";
 import { Breadcrumb } from "../../components";
@@ -25,6 +26,8 @@ import imageBasePath from "../../../config";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { RiDeleteBin3Line } from "react-icons/ri";
 import SimpleModal from "../../Shared/SimpleModal/SimpleModal";
+import IOSSwitch from "../../Shared/Forms/iosSwitch";
+
 // import { convertImageToBase64 } from "../../util/convertImageToBase64";
 import { getBase64 } from "../../util/getBase64";
 
@@ -39,15 +42,16 @@ const SliderImages = () => {
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
+  const [renderMe, setRenderMe] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsPageLoading(true);
-        let res = await axios.get("/setting/view");
-        if (res) {
+        let res = await axios.get("/settings/casino-sliders");
+        if (res?.data?.success) {
           let data = res?.data?.data;
-          setDataList(data?.sliderImgs);
+          setDataList(data?.all);
         }
         setIsPageLoading(false);
         setErrorMsg("");
@@ -57,7 +61,7 @@ const SliderImages = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [renderMe]);
 
   const openNotificationWithIcon = (message, type) => {
     notification[type]({
@@ -82,17 +86,20 @@ const SliderImages = () => {
       }
 
       let obj = {
-        url: url,
-        image: baseImg,
+        slider:[
+         {
+          image: baseImg,
+         }
+        ],
       };
 
       setIsLoading(true);
-      const res = await axios.patch(`/setting/upload-slider-image`, obj);
+      const res = await axios.post(`/settings/add/casino-slider`, obj);
       if (res?.data?.success) {
         setUrl("");
         setFileList([]);
         setSelectedFile(null);
-        setDataList(res?.data?.data);
+        setRenderMe(!renderMe);
         setFileError("");
         openNotificationWithIcon(res?.data?.message, "success");
       } else {
@@ -126,15 +133,38 @@ const SliderImages = () => {
 
   const deleteHandler = async () => {
     try {
-      let res = await axios.post(`/setting/delete-slider-image`, deleteData);
+      let res = await axios.post(`/settings/slider/delete`,{sliderId: deleteData?.sliderId});
       setDeleteData(null);
-      setDataList(res?.data?.data);
+      setRenderMe(!renderMe)
       openNotificationWithIcon(res?.data?.message, "success");
     } catch (error) {
       openNotificationWithIcon(error?.response?.data?.message, "error");
     }
     setDeleteData(null);
     setIsOpenModal(false);
+  };
+
+  const featuredUpdateHandler = async (data) => {
+    try {
+      const createRes = await axios.post(`/content/slider/update`, {
+        sliderId: data?.sliderId,
+        isActive: !data?.isActive,
+      });
+      let updatedData = dataList.map((list) => {
+        if (list.sliderId === data.sliderId) {
+          list.isActive = !list.isActive;
+        }
+        return list;
+      });
+      setDataList(updatedData);
+      if (createRes?.data?.success) {
+        openNotificationWithIcon("Slider status update", "success");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      openNotificationWithIcon(error?.response?.data?.message, "error");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -165,7 +195,7 @@ const SliderImages = () => {
                       <small>{fileError}</small>
                     </p>
                   </Box>
-                  <Box sx={{ mb: 2 }}>
+                  {/* <Box sx={{ mb: 2 }}>
                     <InputLabel className="mb-2 text-black">Add a link for pop up image</InputLabel>
                     <TextField
                       label=""
@@ -176,7 +206,7 @@ const SliderImages = () => {
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                     />
-                  </Box>
+                  </Box> */}
                 </Grid>
               </Grid>
 
@@ -208,7 +238,7 @@ const SliderImages = () => {
                           <strong>#</strong>
                         </TableCell>
                         <TableCell align="center">Image</TableCell>
-                        <TableCell align="center">Url</TableCell>
+                        <TableCell align="center">Active/Inactive</TableCell>
                         <TableCell align="center">Action</TableCell>
                       </TableRow>
                     </TableHead>
@@ -222,7 +252,16 @@ const SliderImages = () => {
                             <Image width={200} src={imageBasePath + "/" + data?.image} />
                           </TableCell>
                           <TableCell className="capitalize" align="center">
-                            {data?.url ? data?.url : "---"}
+                          <FormControlLabel
+                              control={
+                                <IOSSwitch
+                                  sx={{ m: 1 }}
+                                  checked={data?.active}
+                                  onClick={() => featuredUpdateHandler(data)}
+                                />
+                              }
+                              label=""
+                            />
                           </TableCell>
 
                           <TableCell align="center">

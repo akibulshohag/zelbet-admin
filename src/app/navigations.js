@@ -48,27 +48,27 @@ export const navigations = [
       },
     ],
   },
-  // {
-  //   name: "Media",
-  //   icon: "card_giftcard",
-  //   children: [
-  //     {
-  //       name: "Pop up",
-  //       path: "/pop-up-img",
-  //       iconText: "OL",
-  //     },
-  //     {
-  //       name: "Slider",
-  //       path: "/slider-img",
-  //       iconText: "VO",
-  //     },
-  //     {
-  //       name: "Banner Text",
-  //       path: "/banner-text",
-  //       iconText: "VO",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Media",
+    icon: "card_giftcard",
+    children: [
+      // {
+      //   name: "Pop up",
+      //   path: "/pop-up-img",
+      //   iconText: "OL",
+      // },
+      {
+        name: "Slider",
+        path: "/slider-img",
+        iconText: "VO",
+      },
+      {
+        name: "Banner Text",
+        path: "/banner-text",
+        iconText: "VO",
+      },
+    ],
+  },
   {
     name: "Employee",
     icon: "card_giftcard",
