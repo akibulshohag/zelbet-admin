@@ -146,19 +146,19 @@ const SliderImages = () => {
 
   const featuredUpdateHandler = async (data) => {
     try {
-      const createRes = await axios.post(`/content/slider/update`, {
+      const createRes = await axios.post(`/settings/slider/update-status`, {
         sliderId: data?.sliderId,
-        isActive: !data?.isActive,
+        active: !data?.isActive,
       });
       let updatedData = dataList.map((list) => {
         if (list.sliderId === data.sliderId) {
-          list.isActive = !list.isActive;
+          list.active = !list.active;
         }
         return list;
       });
       setDataList(updatedData);
       if (createRes?.data?.success) {
-        openNotificationWithIcon("Slider status update", "success");
+        openNotificationWithIcon(createRes?.data?.message, "success");
       }
       setIsLoading(false);
     } catch (error) {
@@ -170,13 +170,13 @@ const SliderImages = () => {
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
-        <Breadcrumb routeSegments={[{ name: "Slider Image" }]} />
+        <Breadcrumb routeSegments={[{ name: "Casino Slider Image" }]} />
       </div>
 
       <Grid container>
         <Grid item md={6} xs={12} className="mb-4">
           <Card elevation={3}>
-            <CardHeader title="Add New Slider Image" />
+            <CardHeader title="Add New Casino Slider Image" />
 
             <form className="px-4 py-6" onSubmit={formSubmitHandler}>
               <Grid container spacing={3}>
@@ -227,7 +227,7 @@ const SliderImages = () => {
 
         <Grid item md={10} xs={12}>
           <Card elevation={3}>
-            <CardHeader title="All Slider Images" />
+            <CardHeader title="All Casino Slider Images" />
             {!isPageLoading ? (
               <div className="w-full overflow-auto  px-6 py-8">
                 {dataList.length > 0 && errorMsg === "" ? (
@@ -238,7 +238,7 @@ const SliderImages = () => {
                           <strong>#</strong>
                         </TableCell>
                         <TableCell align="center">Image</TableCell>
-                        <TableCell align="center">Active/Inactive</TableCell>
+                        <TableCell align="center">InActive/Active</TableCell>
                         <TableCell align="center">Action</TableCell>
                       </TableRow>
                     </TableHead>
