@@ -67,8 +67,16 @@ const pagesRoutes = [
     component: React.lazy(() => import("./media/popupImg")),
   },
   {
-    path: "/slider-img",
+    path: "/casino-slider-img",
     component: React.lazy(() => import("./media/sliders")),
+  },
+  {
+    path: "/live-casino-slider-img",
+    component: React.lazy(() => import("./media/liveCasinoSlider")),
+  },
+  {
+    path: "/sports-slider-img",
+    component: React.lazy(() => import("./media/sportsSlider")),
   },
   {
     path: "/banner-text",

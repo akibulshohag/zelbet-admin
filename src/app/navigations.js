@@ -58,8 +58,18 @@ export const navigations = [
       //   iconText: "OL",
       // },
       {
-        name: "Slider",
-        path: "/slider-img",
+        name: "Sports Slider",
+        path: "/sports-slider-img",
+        iconText: "VO",
+      },
+      {
+        name: "Casino Slider",
+        path: "/casino-slider-img",
+        iconText: "VO",
+      },
+      {
+        name: "Live Casino Slider",
+        path: "/live-casino-slider-img",
         iconText: "VO",
       },
       {
